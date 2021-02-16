@@ -1,0 +1,103 @@
+<MyButton@MDFillRoundFlatIconButton>:
+
+<MyBox>:
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+<Main>:
+    Image:
+        source: 'bg_main.jpg'
+        allow_stretch: True
+        keep_ratio: False
+        #size: self.texture_size
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: 100
+        spacing : 30
+        #md_bg_color: app.theme_cls.primary_light
+        MDFloatingActionButton:
+            user_font_size: "64sp"
+            elevation_normal: 12
+            text: 'practice'
+            icon: 'dumbbell'
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
+            on_release:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'practice'
+
+        MDFloatingActionButton:
+            user_font_size: "64sp"
+            elevation_normal: 12
+            text: 'revision'
+            icon: 'brain'
+            pos_hint: {"center_x": 0.5, "center_y": 0.4}
+            on_release:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'revision'
+
+<Practice>:
+    input: input
+    output: output
+    practice_text: practice_text
+    meaning_viewer: meaning_viewer
+    start_btn: start_btn
+
+    MDBackdrop:
+        title: 'Practice'
+        header_text: 'words meaning'
+        elevation: 10
+        left_action_items: [["arrow-left",lambda x: root.return_()]]
+        right_action_items: [["pen", lambda x: root.copy_mode()], ["brain", lambda x: root.memorize_mode()], ["file-document-box-plus-outline", lambda x: root.add_widg()]]
+        on_open: root.display_words_meaning()
+        MDBackdropFrontLayer:
+            id: box
+            orientation: 'vertical'
+            md_bg_color: app.theme_cls.bg_dark
+            MDLabel:
+                id: practice_text
+                halign: "center"
+                font_size: 20
+            MDLabel:
+                id: output
+                halign: "center"
+                font_size: 20
+        MDBackdropBackLayer:
+            orientation: 'vertical'
+            md_bg_color: app.theme_cls.bg_dark
+            PageLayout:
+                id: meaning_viewer
+    MDTextFieldRect:
+        id: input
+        hint_text: 'paste your favorite text here to practice on!'
+        size_hint:(.8, .3)
+        pos_hint:{'x':.1, 'y':.3}
+    MDFillRoundFlatButton:
+        id: start_btn
+        text: 'START'
+        font_size: 40
+        size_hint:(.3, .1)
+        pos_hint:{'center_x':.5, 'y':.2}
+        on_press:
+            root.parse()
+            root.set_practice_text()
+            root.keyboard_on()
+            root.remove_widget(self)
+            root.remove_widget(root.input)
+
+<Revision>:
+    output: output
+    practice_text: practice_text
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            title: 'Revision'
+            left_action_items: [["arrow-left",lambda x: root.return_()]]
+        MDLabel:
+            id: practice_text
+            halign: "center"
+            font_size: 20
+        MDLabel:
+            id: output
+            halign: "center"
+            font_size: 20
